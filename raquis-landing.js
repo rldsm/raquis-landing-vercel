@@ -1,7 +1,15 @@
 (() => {
   'use strict';
 
-  const ASSET_BASE = 'https://raquis-landing-vercel.vercel.app/assets/';
+  const LEGACY_ASSET_BASE = 'https://raquis-landing-vercel.vercel.app/assets/';
+  const SCRIPT_ASSET_BASE = (() => {
+    try {
+      const scriptUrl = document.currentScript && document.currentScript.src;
+      return scriptUrl ? new URL('./assets/', scriptUrl).href : LEGACY_ASSET_BASE;
+    } catch (_) {
+      return LEGACY_ASSET_BASE;
+    }
+  })();
   const DEFAULT_BOOKING = 'https://93acf75076f8628c4a58b409561c93d08b7866c7.agenda.softwaredentalink.com/agenda/especialidad?modalidad=1&id_especialidad=13';
   const DEFAULT_LOGO = 'https://raquischile.cl/assets/themes/clinica%20raquis/img/logo_header.png';
   const clp = n => `$${Number(n).toLocaleString('es-CL')}`;
@@ -21,6 +29,7 @@
     constructor() {
       super();
       this.attachShadow({ mode: 'open' });
+      this.assetBase = LEGACY_ASSET_BASE;
     }
 
     connectedCallback() {
@@ -29,12 +38,45 @@
         this._resize = () => this.fullBleed();
         addEventListener('resize', this._resize, { passive: true });
       }
-      this.render();
-      this.bind();
+
+      this.resolveAssetBase().then(() => {
+        if (!this.isConnected) return;
+        this.render();
+        this.bind();
+      });
     }
 
     disconnectedCallback() {
       if (this._resize) removeEventListener('resize', this._resize);
+    }
+
+    resolveAssetBase() {
+      const customBase = this.getAttribute('asset-base');
+      if (customBase) {
+        this.assetBase = customBase.endsWith('/') ? customBase : `${customBase}/`;
+        return Promise.resolve();
+      }
+
+      if (SCRIPT_ASSET_BASE === LEGACY_ASSET_BASE) {
+        this.assetBase = LEGACY_ASSET_BASE;
+        return Promise.resolve();
+      }
+
+      return new Promise(resolve => {
+        const probe = new Image();
+        let settled = false;
+        const finish = base => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          this.assetBase = base;
+          resolve();
+        };
+        const timer = setTimeout(() => finish(LEGACY_ASSET_BASE), 1800);
+        probe.onload = () => finish(SCRIPT_ASSET_BASE);
+        probe.onerror = () => finish(LEGACY_ASSET_BASE);
+        probe.src = `${SCRIPT_ASSET_BASE}hero.webp`;
+      });
     }
 
     fullBleed() {
@@ -50,6 +92,7 @@
     }
 
     get cfg() {
+      const base = this.assetBase || LEGACY_ASSET_BASE;
       return {
         regular: this.getAttribute('regular-price') || '35000',
         promo: this.getAttribute('promo-price') || '21000',
@@ -57,9 +100,9 @@
         label: this.getAttribute('campaign-label') || 'TODOS LOS MARTES DE SEPTIEMBRE',
         booking: tracked(this.getAttribute('booking-url') || DEFAULT_BOOKING),
         logo: this.getAttribute('logo-src') || DEFAULT_LOGO,
-        hero: this.getAttribute('hero-image') || `${ASSET_BASE}hero.webp`,
-        video: this.getAttribute('video-src') || `${ASSET_BASE}primera-sesion.mp4`,
-        poster: this.getAttribute('video-poster') || `${ASSET_BASE}video-poster.jpg`
+        hero: this.getAttribute('hero-image') || `${base}hero.webp`,
+        video: this.getAttribute('video-src') || `${base}primera-sesion.mp4`,
+        poster: this.getAttribute('video-poster') || `${base}video-poster.jpg`
       };
     }
 
