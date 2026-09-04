@@ -2,15 +2,17 @@
 
 Landing estática y embebible como Web Component. No usa React, librerías externas ni build step.
 
-## 1. Vista directa en Vercel
+## Estado actual
 
-El archivo `index.html` permite abrir la landing directamente como una página independiente.
+El repositorio contiene el código de la landing optimizada y full-width (`index.html`, `raquis-landing.js` y `vercel.json`).
 
-La URL de agendamiento de Dentalink ya está configurada en `index.html` y también como fallback del componente.
+Por ahora los assets pesados (hero, poster y video vertical de Paz) siguen siendo servidos desde el deployment original de Vercel:
 
-## 2. Insertarla dentro de raquischile.cl mediante JS
+`https://raquis-landing-vercel.vercel.app/assets/`
 
-Una vez desplegado el proyecto en Vercel, inserta esto en la página de campaña de Raquis:
+Esto permite actualizar el código desde GitHub sin volver a subir el video de más de 5 MB al repositorio.
+
+## Insertar en raquischile.cl
 
 ```html
 <raquis-landing
@@ -23,36 +25,15 @@ Una vez desplegado el proyecto en Vercel, inserta esto en la página de campaña
   campaign-label="TODOS LOS MARTES DE SEPTIEMBRE">
 </raquis-landing>
 
-<script src="https://TU-PROYECTO.vercel.app/raquis-landing.js" defer></script>
+<script src="https://URL-DEL-NUEVO-PROYECTO.vercel.app/raquis-landing.js" defer></script>
 ```
 
-El componente usa Shadow DOM, por lo que los estilos del sitio principal no deberían romper la landing ni viceversa.
+El componente usa Shadow DOM y además se expande en modo full-bleed para escapar de contenedores del sitio con `max-width`. Para desactivar ese comportamiento se puede agregar el atributo `contained`.
 
-Además, por defecto el host se expande en modo **full-bleed** para escapar de contenedores del sitio con `max-width`. Si alguna vez quieres que respete el ancho del contenedor padre, agrega el atributo `contained`.
+## Tracking
 
-Cuando la landing se inserta debajo del header normal de Raquis, usa `hide-brand` para no repetir el logo dentro de la campaña.
+Cada CTA conserva `utm_*`, `fbclid`, `gclid` y `msclkid`, hace `dataLayer.push` si GTM está disponible, dispara un evento custom de Meta Pixel si `fbq` existe y emite `raquis:cta`.
 
-## 3. Tracking
+## Importante al conectar Vercel
 
-Cada CTA:
-
-- conserva automáticamente parámetros `utm_*`, `fbclid`, `gclid` y `msclkid` al ir a la agenda;
-- hace `dataLayer.push({ event: 'raquis_landing_cta', ... })` si GTM está presente;
-- envía `fbq('trackCustom', 'RaquisLandingCTA', ...)` si Meta Pixel ya está cargado en raquischile.cl;
-- emite el evento DOM `raquis:cta` para integraciones personalizadas.
-
-## 4. Assets
-
-El logo principal se carga desde la URL oficial de Raquis:
-`https://raquischile.cl/assets/themes/clinica%20raquis/img/logo_header.png`
-
-`assets/logo.png` queda como respaldo local.
-
-- `assets/logo.png`
-- `assets/hero.webp`
-- `assets/primera-sesion.mp4`
-- `assets/video-poster.jpg`
-
-## 5. Recomendación de publicación
-
-Para una campaña pagada, la opción preferida es crear una página mínima en `raquischile.cl` sin header/footer del sitio y montar allí este componente. Así la URL de los anuncios sigue siendo del dominio Raquis y la landing se mantiene desacoplada del CMS.
+Mientras los assets sigan alojados en `https://raquis-landing-vercel.vercel.app/assets/`, no reemplazar ese deployment original con este repositorio. Crear un segundo proyecto Vercel conectado a GitHub para servir el código actualizado. Después podemos migrar los assets al CDN de Raquis y consolidar todo en un solo proyecto.
