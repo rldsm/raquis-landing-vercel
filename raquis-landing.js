@@ -155,12 +155,16 @@
     }
 
     bind() {
-      this.shadowRoot.querySelectorAll('.js-cta').forEach(a => a.addEventListener('click', () => {
-        const detail = { event: 'raquis_landing_cta', position: a.dataset.pos, price: Number(this.cfg.promo), discount: this.cfg.discount, destination: a.href };
-        try { window.dataLayer = window.dataLayer || []; window.dataLayer.push(detail); } catch (_) {}
-        try { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'RaquisLandingCTA', { position: detail.position, value: detail.price, currency: 'CLP' }); } catch (_) {}
-        this.dispatchEvent(new CustomEvent('raquis:cta', { bubbles: true, composed: true, detail }));
-      }));
+      this.shadowRoot.querySelectorAll('.js-cta').forEach(a => {
+        a.setAttribute('target', '_blank');
+        a.setAttribute('rel', 'noopener noreferrer');
+        a.addEventListener('click', () => {
+          const detail = { event: 'raquis_landing_cta', position: a.dataset.pos, price: Number(this.cfg.promo), discount: this.cfg.discount, destination: a.href };
+          try { window.dataLayer = window.dataLayer || []; window.dataLayer.push(detail); } catch (_) {}
+          try { if (typeof window.fbq === 'function') window.fbq('trackCustom', 'RaquisLandingCTA', { position: detail.position, value: detail.price, currency: 'CLP' }); } catch (_) {}
+          this.dispatchEvent(new CustomEvent('raquis:cta', { bubbles: true, composed: true, detail }));
+        });
+      });
     }
   }
 
