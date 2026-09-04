@@ -127,13 +127,13 @@
         <div class="wrap brand"><img src="${c.logo}" alt="Raquis Quiropráctica y Kinesiología"></div>
         <section class="wrap hero">
           <div class="hero-copy">
-            <p class="eyebrow">▣ &nbsp;${c.label}</p>
-            <h1><span class="accent">${c.discount} OFF</span> en tu atención quiropráctica</h1>
+            <p class="eyebrow">${c.label}</p>
+            <h1><span class="accent">${c.discount} OFF</span> en tu sesión quiropráctica</h1>
             <p class="sub">Todos los martes de septiembre. Agenda tu sesión y recibe el descuento al pagar en recepción.</p>
             <div class="price"><div><span class="label">Valor general</span><span class="old">${clp(c.regular)}</span></div><div><span class="label">Valor martes</span><span class="promo">${clp(c.promo)}</span></div></div>
             <div class="loc"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.4A2.4 2.4 0 1 1 12 6.6a2.4 2.4 0 0 1 0 4.8Z"/></svg><span>Sede Providencia</span><span class="sep">|</span><span>Sede Santiago Centro</span></div>
-            <a class="cta js-cta" data-pos="hero" href="${c.booking}">AGENDAR CON ${c.discount} OFF →</a>
-            <div class="promo-note"><strong>¿Cómo funciona?</strong> Solo debes agendar tu sesión. Al momento de pagar en recepción, se aplicará un ${c.discount} de descuento.<span>*No acumulable con otras promociones ni descuentos.</span></div>
+            <a class="cta js-cta" data-pos="hero" href="${c.booking}">AGENDAR SESIÓN →</a>
+            <div class="promo-note"><strong>¿Cómo funciona?</strong><br>Solo debes agendar tu sesión. Al momento de pagar en recepción, se aplicará un ${c.discount} de descuento.<span>*No acumulable con otras promociones ni descuentos.</span></div>
             <p class="micro">Cupos sujetos a disponibilidad por sede y horario.</p>
           </div>
           <div class="hero-img"><img src="${c.hero}" alt="Atención quiropráctica en Clínica Raquis"></div>
@@ -149,10 +149,10 @@
         </div></section>
         <section class="section video-sec"><div class="wrap video-grid">
           <div class="video-frame"><video controls playsinline preload="metadata" poster="${c.poster}"><source src="${c.video}" type="video/mp4"></video></div>
-          <div class="video-copy"><h2>Conoce cómo es una primera atención en Raquis</h2><p>Paz Grifferos te muestra qué hacemos durante tu primera sesión y cómo evaluamos tu condición antes del tratamiento.</p><a class="cta js-cta" data-pos="video" href="${c.booking}">AGENDAR CON ${c.discount} OFF →</a></div>
+          <div class="video-copy"><h2>Conoce cómo es una primera atención en Raquis</h2><p>Paz Grifferos te muestra qué hacemos durante tu primera sesión y cómo evaluamos tu condición antes del tratamiento.</p><a class="cta js-cta" data-pos="video" href="${c.booking}">AGENDAR SESIÓN →</a></div>
         </div></section>
-        <section class="wrap final"><div class="final-box"><h2>Agenda tu atención con <strong>${c.discount} OFF</strong></h2><p class="final-price"><s>${clp(c.regular)}</s> · <strong>${clp(c.promo)} todos los martes de septiembre</strong></p><a class="cta js-cta" data-pos="final" href="${c.booking}">AGENDAR CON ${c.discount} OFF →</a><div class="promo-note"><strong>Solo debes agendar tu sesión.</strong> Al momento de pagar en recepción, se aplicará el ${c.discount} de descuento.<span>*No acumulable con otras promociones ni descuentos.</span></div><div class="final-loc">Providencia <span>·</span> Santiago Centro <span>·</span> Todos los martes de septiembre</div></div></section>
-        <div class="sticky"><a class="cta js-cta" data-pos="sticky_mobile" href="${c.booking}">AGENDAR CON ${c.discount} OFF</a></div>
+        <section class="wrap final"><div class="final-box"><h2>Agenda tu sesión con <strong>${c.discount} OFF</strong></h2><p class="final-price"><s>${clp(c.regular)}</s> · <strong>${clp(c.promo)} todos los martes de septiembre</strong></p><a class="cta js-cta" data-pos="final" href="${c.booking}">AGENDAR SESIÓN →</a><div class="promo-note"><strong>Solo debes agendar tu sesión.</strong> Al momento de pagar en recepción, se aplicará el ${c.discount} de descuento.<span>*No acumulable con otras promociones ni descuentos.</span></div><div class="final-loc">Providencia <span>·</span> Santiago Centro <span>·</span> Todos los martes de septiembre</div></div></section>
+        <div class="sticky"><a class="cta js-cta" data-pos="sticky_mobile" href="${c.booking}">AGENDAR SESIÓN</a></div>
       </main>`;
     }
 
